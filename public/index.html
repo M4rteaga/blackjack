@@ -48,11 +48,11 @@
           <div class="div1">
             <img src="assets/svg/Blancas.svg" class="carta" />
           </div>
-          <div class="div2">
-            <li v-for='(cartaHost,index) in datosJuego.Cartas[this.puesto.Puesto]'>
-              {{cartaHost}}
-              <!-- {{cartaHost}} -->
-            </li>
+          <div class="div2" v-if='datosJuego.Cartas'>
+            <ul  v-for='(cartaHost,key) in datosJuego.Cartas[0]'>
+              <img src="assets/svg/Trebol/KTrebol.svg" class="carta" />
+              <!-- <h1>{{cartaHost.Valor}}{{cartaHost.Tipo}}</h1> -->
+            </ul>
           </div>
           <div class="div3">
             <img src="assets/svg/Negras.svg" class="carta" />
@@ -90,9 +90,9 @@
           <div class="div6"></div>
           <div class="div7">
             <container class="jugador2">
-              <li v-for='cartaJugador in verCartasJugadores[0]'>
+              <!-- <li >
                 {{cartaJugador}}
-              </li>
+              </li> -->
               <!-- <img src="assets/svg/Corazon/AsCorazon.svg" class="carta" />
               <img src="assets/svg/Trebol/KTrebol.svg" class="carta" /> -->
             </container>
