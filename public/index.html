@@ -1,145 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BlackjackG1</title>
-    <link rel="stylesheet" href="assets/css/styles.css" />
-    <!-- para usar vue -->
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
-    <!-- para poder usar axios -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://unpkg.com/vue-async-computed@3.9.0"></script>
-  </head>
 
-  <body>
-    <div id="app">
-      <div class="inicio" v-show="inicio">
-        <div>
-          <h1>{{datosJuego.Estado}}</h1>
-        </div>
-        <svg width="450" height="100">
-          <path
-            id="curve"
-            d="M 52 90 q 175 -60 350 0"
-            stroke-width="5"
-            fill="transparent"
-          />
-          <text class="title">
-            <textPath xlink:href="#curve">
-              <tspan>Black</tspan>
-              <tspan fill="#FF0000">jack</tspan>
-            </textPath>
-          </text>
-        </svg>
-        <div class="cartas-inicio">
-          <img
-            src="assets/svg/cardIntro.svg"
-            style="width: 100%; height: auto"
-          />
-        </div>
-        <button v-on:click="comenzarAJugar" :disabled="!botonInicio">Comenzar a jugar</button>
-        <button v-on:click="continuarJugando" style="margin-top: 1rem;">Continuar jugando</button>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BlackjackG1</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <!-- para usar vue -->
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+  <!-- para poder usar axios -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/vue-async-computed@3.9.0"></script>
+</head>
+
+<body>
+  <div id="app">
+    <div class="inicio" v-show="inicio">
+      <div>
+        <h1>{{datosJuego.Estado}}</h1>
       </div>
+      <svg width="450" height="100">
+        <path id="curve" d="M 52 90 q 175 -60 350 0" stroke-width="5" fill="transparent" />
+        <text class="title">
+          <textPath xlink:href="#curve">
+            <tspan>Black</tspan>
+            <tspan fill="#FF0000">jack</tspan>
+          </textPath>
+        </text>
+      </svg>
+      <div class="cartas-inicio">
+        <img src="assets/svg/cardIntro.svg" style="width: 100%; height: auto" />
+      </div>
+      <button v-on:click="comenzarAJugar" :disabled="!botonInicio">Comenzar a jugar</button>
+      <button v-on:click="continuarJugando" style="margin-top: 1rem;">Continuar jugando</button>
+    </div>
 
-      <div class="juego" v-show="jugar">
-        <div class="tablero">
-          <div class="div1">
-            <img src="assets/svg/Blancas.svg" class="carta" />
-          </div>
-          <div class="div2" v-if='datosJuego.Cartas'>
-            <ul  v-for='cartaHost in datosJuego.Cartas[0]'>
-              <img v-if="cartaHost.Tipo == ''" class="carta" v-bind:src="'assets/svg/Blancas.svg'" >
-              <img v-if="cartaHost.Tipo != ''" class="carta"  v-bind:src="'assets/svg/' + cartaHost.Tipo + '/' + cartaHost.Valor + cartaHost.Tipo + '.svg'" >
-              
-            </ul>
-          </div>
-          <div class="div3">
-            <img src="assets/svg/Negras.svg" class="carta" />
-          </div>
-          <div class="div4"></div>
-          <div class="div5">
-            <container class="decoracio">
-              <svg width="864" height="225">
-                <path
-                  d="M 70 25 Q 432 200 775 25 "
-                  stroke="#F1F2EB"
-                  stroke-width="2"
-                  fill="none"
-                />
-                <path
-                  id="curvaTablero"
-                  d="M 10 100 Q 432 300 845 100 "
-                  stroke="#F1F2EB"
-                  stroke-width="2"
-                  fill="none"
-                />
-                <text class="title">
-                  <textPath
-                    xlink:href="#curvaTablero"
-                    startOffset="50%"
-                    text-anchor="middle"
-                  >
-                    <tspan>Black</tspan>
-                    <tspan fill="#FF0000">jack</tspan>
-                  </textPath>
-                </text>
-              </svg>
-            </container>
-          </div>
-          <div class="div6"></div>
-          <div class="div7">
-            <container class="jugador2">
-              <!-- <li >
-                {{cartaJugador}}
-              </li> -->
-              <!-- <img src="assets/svg/Corazon/AsCorazon.svg" class="carta" />
-              <img src="assets/svg/Trebol/KTrebol.svg" class="carta" /> -->
-            </container>
-          </div>
-          <div class="div8"></div>
-          <div class="div9">
-            <container class="jugador2">
-              <!-- <ul v-for=""> -->
-                <!-- <img v-if="cartaHost.Tipo == ''" class="carta" v-bind:src="'assets/svg/Blancas.svg'" > -->
-              <img src="assets/svg/Treboles/KTreboles.svg" class="carta" />
-              <!-- </ul> -->      
-            </container>
-          </div>
-          <div class="div10"></div>
-          <div class="div11" >
-            <ul v-for='carta in verCartas'>
-              <!-- {{carta}} -->
-              <img v-if="carta.Tipo != ''"  class="carta" v-bind:src="'assets/svg/' + carta.Tipo + '/' + carta.Valor + carta.Tipo + '.svg'">
-            </ul>
-
-          </div>
-          <div class="div12"></div>
+    <div class="juego" v-show="jugar">
+      <div class="tablero">
+        <div class="div1">
+          <img src="assets/svg/Blancas.svg" class="carta" />
         </div>
-        <div class="estado">
-          <div class="datosApuesta">
-            <div class="divModenas">
-              <button class="monedas-btn"  @click=""><img src="assets/svg/moneda1000.svg" class="moneda" /></button>
-              <button class="monedas-btn"  @click=""><img src="assets/svg/moneda2000.svg" class="moneda" /></button>
-              <button class="monedas-btn"  @click=""><img src="assets/svg/moneda5000.svg" class="moneda" /></button>
-            </div>
-              <p>Suma: {{suma}}</p>
-              <p>Estado: {{datosJuego.Estado}}</p>
-              <p id="tiempo">Segundos: {{datosJuego.Segundos}}</p>
-              <p>Turno: {{datosJuego.Turno}}</p>
-              <p>Puesto: {{puesto.Puesto}}</p>
+        <div class="div2" v-if='datosJuego.Cartas'>
+          <ul v-for='cartaHost in datosJuego.Cartas[0]'>
+            <img v-if="cartaHost.Tipo == ''" class="carta" v-bind:src="'assets/svg/Blancas.svg'">
+            <img v-if="cartaHost.Tipo != ''" class="carta"
+              v-bind:src="'assets/svg/' + cartaHost.Tipo + '/' + cartaHost.Valor + cartaHost.Tipo + '.svg'">
+
+          </ul>
+        </div>
+        <div class="div3">
+          <img src="assets/svg/Negras.svg" class="carta" />
+        </div>
+        <div class="div4"></div>
+        <div class="div5">
+          <container class="decoracio">
+            <svg width="864" height="225">
+              <path d="M 70 25 Q 432 200 775 25 " stroke="#F1F2EB" stroke-width="2" fill="none" />
+              <path id="curvaTablero" d="M 10 100 Q 432 300 845 100 " stroke="#F1F2EB" stroke-width="2" fill="none" />
+              <text class="title">
+                <textPath xlink:href="#curvaTablero" startOffset="50%" text-anchor="middle">
+                  <tspan>Black</tspan>
+                  <tspan fill="#FF0000">jack</tspan>
+                </textPath>
+              </text>
+            </svg>
+          </container>
+        </div>
+        <div class="div6"></div>
+        <div class="div7">
+          <container class="jugador2">
+            <span v-if="puesto.Puesto == 1 && datosJuego.Cartas">
+              <ul v-if="datosJuego.Cartas.length > 3" v-for="cartaJugador2 in datosJuego.Cartas[puesto.Puesto + 2]">
+                <img class="carta"
+                  v-bind:src="'assets/svg/' + cartaJugador2.Tipo + '/' + cartaJugador2.Valor + cartaJugador2.Tipo + '.svg'">
+              </ul>
+              <img v-if="datosJuego.Cartas.length==2" class="cartaEspera" src="assets/svg/Nan.svg">
+            </span>
+            <span v-else-if="puesto.Puesto >= 2 ">
+              <ul v-for="cartaJugador2 in datosJuego.Cartas[puesto.Puesto + 1]">
+                <img class="carta"
+                  v-bind:src="'assets/svg/' + cartaJugador2.Tipo + '/' + cartaJugador2.Valor + cartaJugador2.Tipo + '.svg'">
+              </ul>
+            </span>
+          </container>
+        </div>
+        <div class="div8"></div>
+        <div class="div9">
+          <container class="jugador1">
+            <span v-if="puesto.Puesto == 1 && datosJuego.Cartas">
+              <ul v-if="datosJuego.Cartas.length > 2" v-for="cartaJugador1 in datosJuego.Cartas[puesto.Puesto + 1]">
+                <img class="carta"
+                  v-bind:src="'assets/svg/' + cartaJugador1.Tipo + '/' + cartaJugador1.Valor + cartaJugador1.Tipo + '.svg'">
+              </ul>
+              <img v-if="datosJuego.Cartas.length == 2" class="cartaEspera" src="assets/svg/Nan.svg">
+            </span>
+            <span v-else-if="puesto.Puesto >= 2 ">
+              <ul v-for="cartaJugador1 in datosJuego.Cartas[puesto.Puesto - 1]">
+                <img class="carta"
+                  v-bind:src="'assets/svg/' + cartaJugador1.Tipo + '/' + cartaJugador1.Valor + cartaJugador1.Tipo + '.svg'">
+              </ul>
+            </span>
+          </container>
+        </div>
+        <div class="div10"></div>
+        <div class="div11">
+          <ul v-for='carta in verCartas'>
+            <img v-if="carta.Tipo != ''" class="carta"
+              v-bind:src="'assets/svg/' + carta.Tipo + '/' + carta.Valor + carta.Tipo + '.svg'">
+          </ul>
+
+        </div>
+        <div class="div12"></div>
+      </div>
+      <div class="estado">
+        <div class="datosApuesta">
+          <div class="divModenas">
+            <button class="monedas-btn" @click=""><img src="assets/svg/moneda1000.svg" class="moneda" /></button>
+            <button class="monedas-btn" @click=""><img src="assets/svg/moneda2000.svg" class="moneda" /></button>
+            <button class="monedas-btn" @click=""><img src="assets/svg/moneda5000.svg" class="moneda" /></button>
+          </div>
+          <p>Suma: {{suma}}</p>
+          <p>Estado: {{datosJuego.Estado}}</p>
+          <p id="tiempo">Segundos: {{datosJuego.Segundos}}</p>
+          <p>Turno: {{datosJuego.Turno}}</p>
+          <p>Puesto: {{puesto.Puesto}}</p>
         </div>
         <div class="botones">
           <button class="pedir-btn" @click="hit">Pedir</button>
           <button class="plantarse-btn" @click="stay">Plantarse</button>
           <button class="salir-btn" @click="salirseDelJuego">Salir</button>
         </div>
-          </div>
-        </div>
       </div>
     </div>
+  </div>
+  </div>
 
-    <script src="funcionalidad.js"></script>
-  </body>
+  <script src="funcionalidad.js"></script>
+</body>
+
 </html>

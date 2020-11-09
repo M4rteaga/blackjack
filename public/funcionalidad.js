@@ -19,9 +19,6 @@ var app = new Vue({
             },
             Turno: 0
         },
-        imgSrc: {
-            srcHost: []
-        }
 
     },
     mounted() {
