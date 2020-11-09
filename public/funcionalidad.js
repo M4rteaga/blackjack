@@ -14,11 +14,15 @@ var app = new Vue({
             Estado: '',
             Segundos: 0,
             Cartas: {
-                Valor:'',
-                Tipo:'',
+                Valor: '',
+                Tipo: '',
             },
             Turno: 0
+        },
+        imgSrc: {
+            srcHost: []
         }
+
     },
     mounted() {
         this.autoUpdate();
@@ -31,15 +35,15 @@ var app = new Vue({
             // let response = await axios.get('/join')
             let response = await fetch('http://172.105.20.118:8080/join')
             this.datosJuego = await response.json()
-            console.log("ESTADO: "+this.datosJuego.Estado)
+            console.log("ESTADO: " + this.datosJuego.Estado)
             this.update()
         },
-        async updatePuesto(){
+        async updatePuesto() {
             let response = await fetch('http://172.105.20.118:8080/puesto')
             this.puesto = await response.json()
-            console.log("PUESTO UPDATED: "+this.puesto.Puesto)
+            console.log("PUESTO UPDATED: " + this.puesto.Puesto)
         },
-        async continuarJugando(){
+        async continuarJugando() {
             this.inicio = false;
             this.jugar = true;
         },
@@ -48,13 +52,13 @@ var app = new Vue({
             this.datosJuego = await response.json()
             this.inicio = true;
             this.jugar = false;
-            this.suma=0
-            this.cartasSumadas=0
-            this.totCartas=2
-            
+            this.suma = 0
+            this.cartasSumadas = 0
+            this.totCartas = 2
+
         },
         async hit() {
-            if (this.datosJuego.Turno==this.puesto.Puesto) {
+            if (this.datosJuego.Turno == this.puesto.Puesto) {
                 console.log("HIT---->Hecho")
                 let response = await fetch('http://172.105.20.118:8080/hit')
                 this.totCartas++
@@ -64,11 +68,11 @@ var app = new Vue({
             let response = await fetch('http://172.105.20.118:8080/stay')
         },
         async stayPasado() {
-            if (this.suma>21) {
+            if (this.suma > 21) {
                 fetch('http://172.105.20.118:8080/stay')
             }
         },
-        autoUpdate: async function(){
+        autoUpdate: async function () {
             setInterval(() => {
                 this.update()
             }, 1000);
@@ -77,61 +81,70 @@ var app = new Vue({
             // let response = await axios.get('/estado')
             let response = await fetch('http://172.105.20.118:8080')
             this.datosJuego = await response.json()
-            console.log("Segundos: "+this.datosJuego.Segundos)
+            console.log("Segundos: " + this.datosJuego.Segundos)
             this.updatePuesto()
             this.calcSuma()
             this.stayPasado()
         },
-        calcSuma(){
-            if (this.puesto.Puesto>=0 && this.datosJuego.Cartas!==null) {
-                while (this.cartasSumadas<this.totCartas) {
-                    let naipe=this.datosJuego.Cartas[this.puesto.Puesto][this.cartasSumadas]
-                    valor=naipe.Valor
-                    if(valor=='J'||valor=='Q'||valor=='K'){
-                        valor=10
-                    }else if(valor=='A'){
-                        valor=11
+        calcSuma() {
+            if (this.puesto.Puesto >= 0 && this.datosJuego.Cartas !== null) {
+                while (this.cartasSumadas < this.totCartas) {
+                    let naipe = this.datosJuego.Cartas[this.puesto.Puesto][this.cartasSumadas]
+                    valor = naipe.Valor
+                    if (valor == 'J' || valor == 'Q' || valor == 'K') {
+                        valor = 10
+                    } else if (valor == 'A') {
+                        valor = 11
                     }
-                    console.log(this.cartasSumadas+" "+this.totCartas)
-                    if (this.cartasSumadas<this.totCartas) {
-                        this.suma=this.suma+parseInt(valor)
-                        console.log("SUMA: "+this.suma)
+                    console.log(this.cartasSumadas + " " + this.totCartas)
+                    if (this.cartasSumadas < this.totCartas) {
+                        this.suma = this.suma + parseInt(valor)
+                        console.log("SUMA: " + this.suma)
                         this.cartasSumadas++
                     }
                 }
             }
         },
+        getCartaSrc: function (index) {
+
+            this.imgSrc.srcHost[index] = this.datosJuego.Cartas[0][index].Valor
+        }
     },
     computed: {
-        verCartas(){
-            if (this.datosJuego.Estado=='Disponible'||this.datosJuego.Estado=='Recibiendo') {
-                this.datosJuego.Cartas = {'Valor':'','Tipo':''}
+        verCartas() {
+            if (this.datosJuego.Estado == 'Disponible' || this.datosJuego.Estado == 'Recibiendo') {
+                this.datosJuego.Cartas = {
+                    'Valor': '',
+                    'Tipo': ''
+                }
             }
             return this.datosJuego.Cartas[this.puesto.Puesto]
         },
-        verCartasHost(){
-            if (this.datosJuego.Estado=='Disponible'||this.datosJuego.Estado=='Recibiendo') {
-                this.datosJuego.Cartas = {'Valor':'','Tipo':''}
+        verCartasHost() {
+            if (this.datosJuego.Estado == 'Disponible' || this.datosJuego.Estado == 'Recibiendo') {
+                this.datosJuego.Cartas = {
+                    'Valor': '',
+                    'Tipo': ''
+                }
             }
             return this.datosJuego.Cartas[0]
-        },  
+        },
         verCartasJugadores() {
-            if (this.puesto.Puesto==1 && this.datosJuego.Estado=="Jugando") {
+            if (this.puesto.Puesto == 1 && this.datosJuego.Estado == "Jugando") {
                 try {
                     return this.datosJuego.Cartas[2]
                 } catch {
                     return null
                 }
-            }else if (this.datosJuego.Estado=="Jugando") {
+            } else if (this.datosJuego.Estado == "Jugando") {
                 try {
-                    return [this.datosJuego.Cartas[this.puesto.Puesto-1],this.datosJuego.Cartas[this.puesto.Puesto+1]]
+                    return [this.datosJuego.Cartas[this.puesto.Puesto - 1], this.datosJuego.Cartas[this.puesto.Puesto + 1]]
                 } catch {
                     return null
                 }
             }
-            return 
-        }
+            return
+        },
     },
 
 });
-

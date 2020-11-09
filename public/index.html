@@ -49,9 +49,10 @@
             <img src="assets/svg/Blancas.svg" class="carta" />
           </div>
           <div class="div2" v-if='datosJuego.Cartas'>
-            <ul  v-for='(cartaHost,key) in datosJuego.Cartas[0]'>
-              <img src="assets/svg/Trebol/KTrebol.svg" class="carta" />
-              <!-- <h1>{{cartaHost.Valor}}{{cartaHost.Tipo}}</h1> -->
+            <ul  v-for='cartaHost in datosJuego.Cartas[0]'>
+              <img v-if="cartaHost.Tipo == ''" class="carta" v-bind:src="'assets/svg/Blancas.svg'" >
+              <img v-if="cartaHost.Tipo != ''" class="carta"  v-bind:src="'assets/svg/' + cartaHost.Tipo + '/' + cartaHost.Valor + cartaHost.Tipo + '.svg'" >
+              
             </ul>
           </div>
           <div class="div3">
@@ -100,18 +101,19 @@
           <div class="div8"></div>
           <div class="div9">
             <container class="jugador2">
-              <img src="assets/svg/Corazon/AsCorazon.svg" class="carta" />
-              <img src="assets/svg/Trebol/KTrebol.svg" class="carta" />
+              <!-- <ul v-for=""> -->
+                <!-- <img v-if="cartaHost.Tipo == ''" class="carta" v-bind:src="'assets/svg/Blancas.svg'" > -->
+              <img src="assets/svg/Treboles/KTreboles.svg" class="carta" />
+              <!-- </ul> -->      
             </container>
           </div>
           <div class="div10"></div>
-          <div class="div11">
-            <li v-for='carta in verCartas'>
-              {{carta}}
-            </li>
-            <!-- <img src="assets/svg/Corazon/AsCorazon.svg" class="carta" />
-            <img src="assets/svg/Trebol/7Trebol.svg" class="carta" />
-            <img src="assets/svg/Trebol/KTrebol.svg" class="carta" /> -->
+          <div class="div11" >
+            <ul v-for='carta in verCartas'>
+              <!-- {{carta}} -->
+              <img v-if="carta.Tipo != ''"  class="carta" v-bind:src="'assets/svg/' + carta.Tipo + '/' + carta.Valor + carta.Tipo + '.svg'">
+            </ul>
+
           </div>
           <div class="div12"></div>
         </div>
