@@ -40,7 +40,7 @@
           />
         </div>
         <button v-on:click="comenzarAJugar" :disabled="!botonInicio">Comenzar a jugar</button>
-        <button v-on:click="continuarJugando">Continuar jugando</button>
+        <button v-on:click="continuarJugando" style="margin-top: 1rem;">Continuar jugando</button>
       </div>
 
       <div class="juego" v-show="jugar">
@@ -49,13 +49,10 @@
             <img src="assets/svg/Blancas.svg" class="carta" />
           </div>
           <div class="div2">
-            <li v-for='cartaHost in verCartasHost'>
+            <li v-for='(cartaHost,index) in datosJuego.Cartas[this.puesto.Puesto]'>
               {{cartaHost}}
+              <!-- {{cartaHost}} -->
             </li>
-            <!-- <img src="assets/svg/Corazon/AsCorazon.svg" class="cartaDealer" />
-            <img src="assets/svg/Corazon/AsCorazon.svg" class="cartaDealer" />
-            <img src="assets/svg/Corazon/AsCorazon.svg" class="cartaDealer" />
-            <img src="assets/svg/Corazon/AsCorazon.svg" class="cartaDealer" /> -->
           </div>
           <div class="div3">
             <img src="assets/svg/Negras.svg" class="carta" />
