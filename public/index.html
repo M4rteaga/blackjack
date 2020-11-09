@@ -1,47 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BlackjackG1</title>
-    <link rel="stylesheet" href="assets/css/styles.css" />
-    <!-- para usar vue -->
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
-    <!-- para poder usar axios -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://unpkg.com/vue-async-computed@3.9.0"></script>
-  </head>
 
-  <body>
-    <div id="app">
-      <div class="inicio" v-show="inicio">
-        <div>
-          <h1>{{datosJuego.Estado}}</h1>
-        </div>
-        <svg width="450" height="100">
-          <path
-            id="curve"
-            d="M 52 90 q 175 -60 350 0"
-            stroke-width="5"
-            fill="transparent"
-          />
-          <text class="title">
-            <textPath xlink:href="#curve">
-              <tspan>Black</tspan>
-              <tspan fill="#FF0000">jack</tspan>
-            </textPath>
-          </text>
-        </svg>
-        <div class="cartas-inicio">
-          <img
-            src="assets/svg/cardIntro.svg"
-            style="width: 100%; height: auto"
-          />
-        </div>
-        <button v-on:click="comenzarAJugar" :disabled="!botonInicio">Comenzar a jugar</button>
-        <button v-on:click="continuarJugando" style="margin-top: 1rem;">Continuar jugando</button>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BlackjackG1</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <!-- para usar vue -->
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+  <!-- para poder usar axios -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/vue-async-computed@3.9.0"></script>
+</head>
+
+<body>
+  <div id="app">
+    <div class="inicio" v-show="inicio">
+      <div>
+        <h1>{{datosJuego.Estado}}</h1>
       </div>
+      <svg width="450" height="100">
+        <path id="curve" d="M 52 90 q 175 -60 350 0" stroke-width="5" fill="transparent" />
+        <text class="title">
+          <textPath xlink:href="#curve">
+            <tspan>Black</tspan>
+            <tspan fill="#FF0000">jack</tspan>
+          </textPath>
+        </text>
+      </svg>
+      <div class="cartas-inicio">
+        <img src="assets/svg/cardIntro.svg" style="width: 100%; height: auto" />
+      </div>
+      <button v-on:click="comenzarAJugar" :disabled="!botonInicio">Comenzar a jugar</button>
+      <button v-on:click="continuarJugando" style="margin-top: 1rem;">Continuar jugando</button>
+    </div>
+
 
       <div class="juego" v-show="jugar">
         <div class="tablero">
@@ -111,32 +105,34 @@
               <img v-if="carta.Tipo != ''"  class="carta" v-bind:src="'assets/svg/' + carta.Tipo + '/' + carta.Valor + carta.Tipo + '.svg'">
             </ul>
 
-          </div>
-          <div class="div12"></div>
+
         </div>
-        <div class="estado">
-          <div class="datosApuesta">
-            <div class="divModenas">
-              <button class="monedas-btn"  @click=""><img src="assets/svg/moneda1000.svg" class="moneda" /></button>
-              <button class="monedas-btn"  @click=""><img src="assets/svg/moneda2000.svg" class="moneda" /></button>
-              <button class="monedas-btn"  @click=""><img src="assets/svg/moneda5000.svg" class="moneda" /></button>
-            </div>
-              <p>Suma: {{suma}}</p>
-              <p>Estado: {{datosJuego.Estado}}</p>
-              <p id="tiempo">Segundos: {{datosJuego.Segundos}}</p>
-              <p>Turno: {{datosJuego.Turno}}</p>
-              <p>Puesto: {{puesto.Puesto}}</p>
+        <div class="div12"></div>
+      </div>
+      <div class="estado">
+        <div class="datosApuesta">
+          <div class="divModenas">
+            <button class="monedas-btn" @click=""><img src="assets/svg/moneda1000.svg" class="moneda" /></button>
+            <button class="monedas-btn" @click=""><img src="assets/svg/moneda2000.svg" class="moneda" /></button>
+            <button class="monedas-btn" @click=""><img src="assets/svg/moneda5000.svg" class="moneda" /></button>
+          </div>
+          <p>Suma: {{suma}}</p>
+          <p>Estado: {{datosJuego.Estado}}</p>
+          <p id="tiempo">Segundos: {{datosJuego.Segundos}}</p>
+          <p>Turno: {{datosJuego.Turno}}</p>
+          <p>Puesto: {{puesto.Puesto}}</p>
         </div>
         <div class="botones">
           <button class="pedir-btn" @click="hit">Pedir</button>
           <button class="plantarse-btn" @click="stay">Plantarse</button>
           <button class="salir-btn" @click="salirseDelJuego">Salir</button>
         </div>
-          </div>
-        </div>
       </div>
     </div>
+  </div>
+  </div>
 
-    <script src="funcionalidad.js"></script>
-  </body>
+  <script src="funcionalidad.js"></script>
+</body>
+
 </html>
