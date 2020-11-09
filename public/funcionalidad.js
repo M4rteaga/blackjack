@@ -7,6 +7,8 @@ var app = new Vue({
         puesto: {
             Puesto: 0,
         },
+        dinero: 100000,
+        apuesta: 0,
         suma: 0,
         cartasSumadas: 0,
         totCartas: 2,
@@ -52,6 +54,7 @@ var app = new Vue({
             this.suma = 0
             this.cartasSumadas = 0
             this.totCartas = 2
+            this.apuesta = 0
 
         },
         async hit() {
@@ -66,6 +69,8 @@ var app = new Vue({
         },
         async stayPasado() {
             if (this.suma > 21) {
+                this.dinero = this.dinero-this.apuesta
+                this.apuesta = 0
                 fetch('http://172.105.20.118:8080/stay')
             }
         },
@@ -83,6 +88,12 @@ var app = new Vue({
             this.calcSuma()
             this.stayPasado()
         },
+        apostar: function (valor) {
+            if (this.puesto.Puesto > 0 && this.datosJuego.Turno == this.puesto.Puesto) {
+                this.apuesta +=valor
+            }
+        },
+
         calcSuma() {
             if (this.puesto.Puesto >= 0 && this.datosJuego.Cartas !== null) {
                 while (this.cartasSumadas < this.totCartas) {
@@ -91,16 +102,25 @@ var app = new Vue({
                     if (valor == 'J' || valor == 'Q' || valor == 'K') {
                         valor = 10
                     } else if (valor == 'A') {
-                        valor = 11
+                        valor =11
                     }
                     console.log(this.cartasSumadas + " " + this.totCartas)
                     if (this.cartasSumadas < this.totCartas) {
                         this.suma = this.suma + parseInt(valor)
+                        if (this.suma >21){
+                            for (i in this.datosJuego.Cartas[this.puesto.Puesto])
+                                if (i.Valor == 'A'){
+                                    this.suma = this.suma -11
+                                    this.suma = this.suma +1
+                                }
+                        }
                         console.log("SUMA: " + this.suma)
                         this.cartasSumadas++
                     }
                 }
+
             }
+            
         },
         getCartaSrc: function (index) {
 

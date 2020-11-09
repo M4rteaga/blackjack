@@ -83,6 +83,12 @@
                   v-bind:src="'assets/svg/' + cartaJugador2.Tipo + '/' + cartaJugador2.Valor + cartaJugador2.Tipo + '.svg'">
               </ul>
             </span>
+            <span v-else-if="puesto.Puesto == 0 && datosJuego.Cartas">
+              <ul v-if="datosJuego.Cartas.length > 1" v-for="carta in datosJuego.Cartas[2]">
+                <img class="carta"
+                  v-bind:src="'assets/svg/' + carta.Tipo + '/' + carta.Valor + carta.Tipo + '.svg'">
+              </ul>
+            </span>
           </container>
         </div>
         <div class="div8"></div>
@@ -101,30 +107,49 @@
                   v-bind:src="'assets/svg/' + cartaJugador1.Tipo + '/' + cartaJugador1.Valor + cartaJugador1.Tipo + '.svg'">
               </ul>
             </span>
+            <span v-else-if="puesto.Puesto == 0 && datosJuego.Cartas">
+              <ul v-if="datosJuego.Cartas.length > 2" v-for="carta in datosJuego.Cartas[3]">
+                <img class="carta"
+                  v-bind:src="'assets/svg/' + carta.Tipo + '/' + carta.Valor + carta.Tipo + '.svg'">
+              </ul>
+            </span>
           </container>
         </div>
         <div class="div10"></div>
         <div class="div11">
-          <ul v-for='carta in verCartas'>
-            <img v-if="carta.Tipo != ''" class="carta"
-              v-bind:src="'assets/svg/' + carta.Tipo + '/' + carta.Valor + carta.Tipo + '.svg'">
-          </ul>
-          <!-- debe corregirce -->
+          <span v-if="puesto.Puesto != 0">
+            <ul v-for='carta in verCartas'>
+              <img v-if="carta.Tipo != ''" class="carta"
+                v-bind:src="'assets/svg/' + carta.Tipo + '/' + carta.Valor + carta.Tipo + '.svg'">
+            </ul>
+          </span>
+          <span v-else-if="puesto.Puesto == 0 && datosJuego.Cartas">
+              <ul v-if="datosJuego.Cartas.length > 1" v-for="carta in datosJuego.Cartas[1]">
+                <img class="carta"
+                  v-bind:src="'assets/svg/' + carta.Tipo + '/' + carta.Valor + carta.Tipo + '.svg'">
+              </ul>
+            </span>
         </div>
         <div class="div12"></div>
       </div>
       <div class="estado">
         <div class="datosApuesta">
-          <div class="divModenas">
-            <button class="monedas-btn" @click=""><img src="assets/svg/moneda1000.svg" class="moneda" /></button>
-            <button class="monedas-btn" @click=""><img src="assets/svg/moneda2000.svg" class="moneda" /></button>
-            <button class="monedas-btn" @click=""><img src="assets/svg/moneda5000.svg" class="moneda" /></button>
+          <div>
+            <p>Dinero: {{dinero}}</p>
+            <p>Apuesta: {{apuesta}}</p>
+          </div>
+          <div class="divModenas"><!--  v-if="puesto.Puesto == 0 || puesto.Puesto != datosJuego.Turno": mondedas-btn: disabled> algo así-->
+            <button class="monedas-btn" id="k1" @click="apostar(1000)"><img src="assets/svg/moneda1000.svg" class="moneda" /></button>
+            <button class="monedas-btn" id="k2" @click="apostar(2000)"><img src="assets/svg/moneda2000.svg" class="moneda" /></button>
+            <button class="monedas-btn" id="k5"@click="apostar(5000)"><img src="assets/svg/moneda5000.svg" class="moneda" /></button>
           </div>
           <p>Suma: {{suma}}</p>
           <p>Estado: {{datosJuego.Estado}}</p>
           <p id="tiempo">Segundos: {{datosJuego.Segundos}}</p>
           <p>Turno: {{datosJuego.Turno}}</p>
           <p>Puesto: {{puesto.Puesto}}</p>
+          <!-- <p>Dinero: {{dinero}}</p> -->
+          <!-- <p>Apuesta: {{apuesta}}</p> -->
         </div>
         <div class="botones">
           <button class="pedir-btn" @click="hit">Pedir</button>
