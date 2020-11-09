@@ -54,12 +54,18 @@ var app = new Vue({
             
         },
         async hit() {
-            console.log("ENTRO AL HIT: "+this.datosJuego.Turno)
-            console.log("PUESTO: "+this.puesto.Puesto)
             if (this.datosJuego.Turno==this.puesto.Puesto) {
                 console.log("HIT---->Hecho")
                 let response = await fetch('http://172.105.20.118:8080/hit')
                 this.totCartas++
+            }
+        },
+        async stay() {
+            let response = await fetch('http://172.105.20.118:8080/stay')
+        },
+        async stayPasado() {
+            if (this.suma>21) {
+                fetch('http://172.105.20.118:8080/stay')
             }
         },
         autoUpdate: async function(){
@@ -74,6 +80,7 @@ var app = new Vue({
             console.log("Segundos: "+this.datosJuego.Segundos)
             this.updatePuesto()
             this.calcSuma()
+            this.stayPasado()
         },
         calcSuma(){
             if (this.puesto.Puesto>=0 && this.datosJuego.Cartas!==null) {
@@ -107,7 +114,23 @@ var app = new Vue({
                 this.datosJuego.Cartas = {'Valor':'','Tipo':''}
             }
             return this.datosJuego.Cartas[0]
-        },
+        },  
+        verCartasJugadores() {
+            if (this.puesto.Puesto==1 && this.datosJuego.Estado=="Jugando") {
+                try {
+                    return this.datosJuego.Cartas[2]
+                } catch {
+                    return null
+                }
+            }else if (this.datosJuego.Estado=="Jugando") {
+                try {
+                    return [this.datosJuego.Cartas[this.puesto.Puesto-1],this.datosJuego.Cartas[this.puesto.Puesto+1]]
+                } catch {
+                    return null
+                }
+            }
+            return 
+        }
     },
 
 });

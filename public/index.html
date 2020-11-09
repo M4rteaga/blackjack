@@ -93,8 +93,11 @@
           <div class="div6"></div>
           <div class="div7">
             <container class="jugador2">
-              <img src="assets/svg/Corazon/AsCorazon.svg" class="carta" />
-              <img src="assets/svg/Trebol/KTrebol.svg" class="carta" />
+              <li v-for='cartaJugador in verCartasJugadores[0]'>
+                {{cartaJugador}}
+              </li>
+              <!-- <img src="assets/svg/Corazon/AsCorazon.svg" class="carta" />
+              <img src="assets/svg/Trebol/KTrebol.svg" class="carta" /> -->
             </container>
           </div>
           <div class="div8"></div>
@@ -130,7 +133,7 @@
         </div>
         <div class="botones">
           <button class="pedir-btn" @click="hit">Pedir</button>
-          <button class="plantarse-btn">Plantarse</button>
+          <button class="plantarse-btn" @click="stay">Plantarse</button>
           <button class="salir-btn" @click="salirseDelJuego">Salir</button>
         </div>
           </div>
