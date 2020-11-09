@@ -48,11 +48,13 @@
           <div class="div1">
             <img src="assets/svg/Blancas.svg" class="carta" />
           </div>
-          <div class="div2" id="host">
-
-            <!-- <img src="assets/svg/Pica/AsPica.svg" class="cartaDealer" />
+          <div class="div2">
+            <li v-for='cartaHost in verCartasHost'>
+              {{cartaHost}}
+            </li>
+            <!-- <img src="assets/svg/Corazon/AsCorazon.svg" class="cartaDealer" />
             <img src="assets/svg/Corazon/AsCorazon.svg" class="cartaDealer" />
-            <img src="assets/svg/Diamante/2Diamante.svg" class="cartaDealer" />
+            <img src="assets/svg/Corazon/AsCorazon.svg" class="cartaDealer" />
             <img src="assets/svg/Corazon/AsCorazon.svg" class="cartaDealer" /> -->
           </div>
           <div class="div3">
@@ -89,24 +91,24 @@
             </container>
           </div>
           <div class="div6"></div>
-          <div class="div7" id="j1">
-            <container class="jugador2"><!-- Izquierdo -->
-              <!-- <img src="assets/svg/Corazon/AsCorazon.svg" class="carta" />
-              <img src="assets/svg/Trebol/KTrebol.svg" class="carta" /> -->
+          <div class="div7">
+            <container class="jugador2">
+              <img src="assets/svg/Corazon/AsCorazon.svg" class="carta" />
+              <img src="assets/svg/Trebol/KTrebol.svg" class="carta" />
             </container>
           </div>
-          <div class="div8" id="msg"></div>
-          <div class="div9" id="j2">
-            <container class="jugador2"><!-- Derecho -->
-              <!-- <img src="assets/svg/Diamante/2Diamante.svg" class="carta" />
-              <img src="assets/svg/Trebol/KTrebol.svg" class="carta" /> -->
+          <div class="div8"></div>
+          <div class="div9">
+            <container class="jugador2">
+              <img src="assets/svg/Corazon/AsCorazon.svg" class="carta" />
+              <img src="assets/svg/Trebol/KTrebol.svg" class="carta" />
             </container>
           </div>
           <div class="div10"></div>
-          <div class="div11" id="jP"><!-- Jugador -->
-            <!-- <li v-for='carta in verCartas'>
+          <div class="div11">
+            <li v-for='carta in verCartas'>
               {{carta}}
-            </li> -->
+            </li>
             <!-- <img src="assets/svg/Corazon/AsCorazon.svg" class="carta" />
             <img src="assets/svg/Trebol/7Trebol.svg" class="carta" />
             <img src="assets/svg/Trebol/KTrebol.svg" class="carta" /> -->
@@ -120,22 +122,22 @@
               <button class="monedas-btn"  @click=""><img src="assets/svg/moneda2000.svg" class="moneda" /></button>
               <button class="monedas-btn"  @click=""><img src="assets/svg/moneda5000.svg" class="moneda" /></button>
             </div>
-              <p id="suma">Suma: {{suma}}</p>
-              <p id="estado">Estado: {{datosJuego.Estado}}</p>
+              <p>Suma: {{suma}}</p>
+              <p>Estado: {{datosJuego.Estado}}</p>
               <p id="tiempo">Segundos: {{datosJuego.Segundos}}</p>
-              <p id="turno">Turno: {{datosJuego.Turno}}</p>
-              <p id="puesto">Puesto: {{puesto.Puesto}}</p>
+              <p>Turno: {{datosJuego.Turno}}</p>
+              <p>Puesto: {{puesto.Puesto}}</p>
         </div>
         <div class="botones">
           <button class="pedir-btn" @click="hit">Pedir</button>
-          <button class="plantarse-btn" @click="plantarse">Plantarse</button>
+          <button class="plantarse-btn">Plantarse</button>
           <button class="salir-btn" @click="salirseDelJuego">Salir</button>
         </div>
           </div>
         </div>
       </div>
     </div>
-    <script src="funcionalidad.js">
-    </script>
+
+    <script src="funcionalidad.js"></script>
   </body>
 </html>
