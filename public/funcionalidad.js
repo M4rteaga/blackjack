@@ -3,6 +3,7 @@ var app = new Vue({
     data: {
         inicio: true,
         jugar: false,
+        continuar: false,
         botonInicio: true,
         puesto: {
             Puesto: 0,
@@ -30,12 +31,12 @@ var app = new Vue({
         async comenzarAJugar() {
             this.inicio = false;
             this.jugar = true;
-            console.log("COMENZAR A JUGAR")
+            console.log("COMIENZAR NUEVO JUEGO!")
             // let response = await axios.get('/join')
             let response = await fetch('http://172.105.20.118:8080/join')
             this.datosJuego = await response.json()
             console.log("ESTADO: " + this.datosJuego.Estado)
-            this.update()
+            this.updatePuesto()
         },
         async updatePuesto() {
             let response = await fetch('http://172.105.20.118:8080/puesto')
@@ -55,24 +56,24 @@ var app = new Vue({
             this.cartasSumadas = 0
             this.totCartas = 2
             this.apuesta = 0
-
         },
         async hit() {
-            if (this.datosJuego.Turno == this.puesto.Puesto) {
+            if (this.datosJuego.Turno == this.puesto.Puesto && this.datosJuego.Estado=="Jugando") {
                 console.log("HIT---->Hecho")
                 let response = await fetch('http://172.105.20.118:8080/hit')
+                this.datosJuego= await response.json()
                 this.totCartas++
+                this.calcSuma()
+                this.update()
             }
         },
         async stay() {
             let response = await fetch('http://172.105.20.118:8080/stay')
         },
         async stayPasado() {
-            if (this.suma > 21) {
-                this.dinero = this.dinero-this.apuesta
-                this.apuesta = 0
-                fetch('http://172.105.20.118:8080/stay')
-            }
+            this.dinero = this.dinero-this.apuesta
+            this.apuesta = 0
+            fetch('http://172.105.20.118:8080/stay')
         },
         autoUpdate: async function () {
             setInterval(() => {
@@ -82,18 +83,64 @@ var app = new Vue({
         async update() {
             // let response = await axios.get('/estado')
             let response = await fetch('http://172.105.20.118:8080')
-            this.datosJuego = await response.json()
-            console.log("Segundos: " + this.datosJuego.Segundos)
-            this.updatePuesto()
-            this.calcSuma()
-            this.stayPasado()
+            djR = await response.json()
+            console.log(djR)
+            console.log(this.datosJuego.Turno)
+            if(djR.Estado == this.datosJuego.Estado){
+                this.datosJuego=djR
+                if(this.datosJuego.Estado!='Disponible')    
+                    console.log(this.datosJuego.Segundos+" segundos")
+            }else{
+                this.datosJuego=djR
+                switch(this.datosJuego.Estado){
+                    case 'Disponible':
+                        if(this.inicio)
+                            console.log("Esperando ingreso.")
+                        else if(this.continuar){
+                            this.continuar=false
+                            this.suma=0
+                            this.cartasSumadas=0
+                            this.totCartas=2
+                            this.apuesta=0
+                            this.datosJuego
+                            this.comenzarAJugar()
+                        }else
+                            this.salirseDelJuego()
+                        break;
+                    case 'Recibiendo':
+                        console.log("Esperando a otros jugadores. Faltan: ")
+                        this.updatePuesto()
+                        break;
+                    case 'Jugando':
+                        if(this.datosJuego.Turno == this.puesto.Puesto){
+                            console.log("¡Juega y has tus apuestas!")
+                            this.calcSuma()
+                        }
+                        console.log("El turno termina en:\n"+this.datosJuego.Segundos+" segundos")
+                        break;
+                    case 'Done':
+                        console.log(this.suma)
+                        this.calcularJuego()
+                        this.continuar=true
+                        console.log("La siguiente mesa disponible en: "+this.datosJuego.Segundos+" segundos")
+
+                        break;
+                }
+
+
+            }
+            // this.datosJuego = await response.json()
+            // console.log("Segundos: " + this.datosJuego.Segundos + '   ' + this.datosJuego.Estado)
+            // this.calcSuma()
+            // this.stayPasado()
         },
         apostar: function (valor) {
-            if (this.puesto.Puesto > 0 && this.datosJuego.Turno == this.puesto.Puesto) {
-                this.apuesta +=valor
+            if (this.puesto.Puesto > 0 && this.datosJuego.Turno == this.puesto.Puesto && this.datosJuego.Estado=="Jugando") {
+                console.log("turno: " + this.datosJuego.Turno)
+                if(valor + this.apuesta <=this.dinero)
+                    this.apuesta +=valor
             }
         },
-
         calcSuma() {
             if (this.puesto.Puesto >= 0 && this.datosJuego.Cartas !== null) {
                 while (this.cartasSumadas < this.totCartas) {
@@ -104,23 +151,67 @@ var app = new Vue({
                     } else if (valor == 'A') {
                         valor =11
                     }
-                    console.log(this.cartasSumadas + " " + this.totCartas)
                     if (this.cartasSumadas < this.totCartas) {
                         this.suma = this.suma + parseInt(valor)
-                        if (this.suma >21){
-                            for (i in this.datosJuego.Cartas[this.puesto.Puesto])
-                                if (i.Valor == 'A'){
+                        if (this.suma >21){ //cambiar un as para que valga 1 en vez de 11 --- no sirve, no se puede recorrer el for
+                            for (i=0;i<this.datosJuego.Cartas[this.puesto.Puesto].length;i++)//in this.datosJuego.Cartas[this.puesto.Puesto])
+                                if (this.datosJuego.Cartas[this.puesto.Puesto][i].Valor == 'A'){
                                     this.suma = this.suma -11
                                     this.suma = this.suma +1
+                                    console.log("con as "+this.suma)
                                 }
+                            console.log("Debería pasar algo")
                         }
                         console.log("SUMA: " + this.suma)
                         this.cartasSumadas++
                     }
                 }
+                if (this.suma >21){
+                    this.stayPasado()
+                }
 
             }
-            
+        },
+        async calcularJuego(){ //sumar la mano del host y compararla con el jugador
+            sumHost = 0
+            valHost = 0
+            console.log("largo: " + this.datosJuego.length)
+            // var jsd = await JSON.parse(this.datosJuego)
+            if(this.suma<=21){
+                for(carta in jsd){//i=0;i<this.datosJuego.Cartas[0].length;i++){
+                    valHost = carta.Valor
+                    if(valHost == 'J' || valHost == 'Q' || valHost == 'K') {
+                        valHost = 10
+                    } else if (valor == 'A') {
+                        valHost =11
+                    }
+                    sumHost +=valHost
+                }
+                if(sumHost >21){
+                    for(cHost in this.datosJuego.Cartas[0]){
+                        if(cHost.Valor=='A'){
+                            sumHost-=10
+                            if(sumHost<=21)
+                                break
+                        }
+                    }
+                }
+                console.log(sumHost)
+                if(this.suma>sumHost){
+                    console.log("¡Ganaste el juego!")
+                    this.dinero = this.dinero + this.apuesta*2
+                }else if(this.suma == sumHost){
+                    console.log("¡Empate!")
+                    this.dinero = this.dinero + this.apuesta
+                }else if(this.suma<sumHost){
+                    console.log("¡Bohoo! Perdiste")
+                    this.dinero = this.dinero - this.apuesta
+                }
+            }else{
+                console.log("¡Bohoo! Perdiste")
+                this.dinero = this.dinero - this.apuesta
+            }
+
         },
         getCartaSrc: function (index) {
 
@@ -146,7 +237,7 @@ var app = new Vue({
             }
             return this.datosJuego.Cartas[0]
         },
-        verCartasJugadores() {
+        verCartasJugadores() {//??
             if (this.puesto.Puesto == 1 && this.datosJuego.Estado == "Jugando") {
                 try {
                     return this.datosJuego.Cartas[2]
