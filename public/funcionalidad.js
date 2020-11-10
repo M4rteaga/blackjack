@@ -85,7 +85,7 @@ var app = new Vue({
             let response = await fetch('http://172.105.20.118:8080')
             djR = await response.json()
             console.log(djR)
-            console.log(this.datosJuego.Turno)
+            // console.log(this.datosJuego.Turno)
             if(djR.Estado == this.datosJuego.Estado){
                 this.datosJuego=djR
                 if(this.datosJuego.Estado!='Disponible')    
@@ -123,7 +123,6 @@ var app = new Vue({
                         this.calcularJuego()
                         this.continuar=true
                         console.log("La siguiente mesa disponible en: "+this.datosJuego.Segundos+" segundos")
-
                         break;
                 }
 
@@ -153,14 +152,17 @@ var app = new Vue({
                     }
                     if (this.cartasSumadas < this.totCartas) {
                         this.suma = this.suma + parseInt(valor)
-                        if (this.suma >21){ //cambiar un as para que valga 1 en vez de 11 --- no sirve, no se puede recorrer el for
-                            for (i=0;i<this.datosJuego.Cartas[this.puesto.Puesto].length;i++)//in this.datosJuego.Cartas[this.puesto.Puesto])
-                                if (this.datosJuego.Cartas[this.puesto.Puesto][i].Valor == 'A'){
-                                    this.suma = this.suma -11
-                                    this.suma = this.suma +1
+                        if (this.suma >21){ 
+                            cont = 0
+                            while(this.datosJuego.Cartas[this.puesto.Puesto][cont]!=null){
+                                if (this.datosJuego.Cartas[this.puesto.Puesto][cont].Valor == 'A'){
+                                    this.suma = this.suma -10
                                     console.log("con as "+this.suma)
                                 }
-                            console.log("Debería pasar algo")
+                                cont++
+                                if(this.suma<=21)
+                                    break
+                            }
                         }
                         console.log("SUMA: " + this.suma)
                         this.cartasSumadas++
@@ -169,49 +171,52 @@ var app = new Vue({
                 if (this.suma >21){
                     this.stayPasado()
                 }
-
             }
         },
-        async calcularJuego(){ //sumar la mano del host y compararla con el jugador
-            sumHost = 0
-            valHost = 0
-            console.log("largo: " + this.datosJuego.length)
-            // var jsd = await JSON.parse(this.datosJuego)
-            if(this.suma<=21){
-                for(carta in jsd){//i=0;i<this.datosJuego.Cartas[0].length;i++){
-                    valHost = carta.Valor
+        calcularJuego(){ //sumar la mano del host y compararla con el jugador
+            if(this.suma<=12){
+                sumHost = 0
+                valHost = 0
+                cont = 0
+                while(this.datosJuego.Cartas[0][cont]!=null){
+                    valHost= this.datosJuego.Cartas[0][cont].Valor
                     if(valHost == 'J' || valHost == 'Q' || valHost == 'K') {
                         valHost = 10
-                    } else if (valor == 'A') {
+                    } else if (valHost == 'A') {
                         valHost =11
                     }
                     sumHost +=valHost
+                    cont++
                 }
-                if(sumHost >21){
-                    for(cHost in this.datosJuego.Cartas[0]){
-                        if(cHost.Valor=='A'){
+                if(sumHost>21){
+                    cont = 0
+                    while(this.datosJuego.Cartas[0][cont]!=null){
+                        if(this.datosJuego.Cartas[0][cont].Valor=='A'){
                             sumHost-=10
+                            console.log("Host con as: "+sumHost)
                             if(sumHost<=21)
                                 break
                         }
                     }
                 }
-                console.log(sumHost)
-                if(this.suma>sumHost){
+                console.log("Host: "+sumHost)
+                console.log("Jugador: "+this.suma)
+                if(sumHost>21){
                     console.log("¡Ganaste el juego!")
                     this.dinero = this.dinero + this.apuesta*2
                 }else if(this.suma == sumHost){
                     console.log("¡Empate!")
                     this.dinero = this.dinero + this.apuesta
+                }else if(this.suma>sumHost){
+                    console.log("¡Ganaste el juego!")
+                    this.dinero = this.dinero + this.apuesta*2
                 }else if(this.suma<sumHost){
                     console.log("¡Bohoo! Perdiste")
                     this.dinero = this.dinero - this.apuesta
                 }
             }else{
                 console.log("¡Bohoo! Perdiste")
-                this.dinero = this.dinero - this.apuesta
             }
-
         },
         getCartaSrc: function (index) {
 
