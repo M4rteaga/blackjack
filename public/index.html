@@ -70,20 +70,20 @@
         <div class="div6"></div>
         <div class="div7">
           <container class="jugador2">
-            <span v-if="puesto.Puesto == 1 && datosJuego.Cartas">
+            <span v-if="puesto.Puesto == 1 && datosJuego.Cartas" class="jugador2">
               <ul v-if="datosJuego.Cartas.length > 3" v-for="cartaJugador2 in datosJuego.Cartas[puesto.Puesto + 2]">
                 <img class="carta"
                   v-bind:src="'assets/svg/' + cartaJugador2.Tipo + '/' + cartaJugador2.Valor + cartaJugador2.Tipo + '.svg'">
               </ul>
               <img v-if="datosJuego.Cartas.length==2" class="cartaEspera" src="assets/svg/Nan.svg">
             </span>
-            <span v-else-if="puesto.Puesto >= 2 ">
+            <span v-else-if="puesto.Puesto >= 2 " class="jugador2">
               <ul v-for="cartaJugador2 in datosJuego.Cartas[puesto.Puesto + 1]">
                 <img class="carta"
                   v-bind:src="'assets/svg/' + cartaJugador2.Tipo + '/' + cartaJugador2.Valor + cartaJugador2.Tipo + '.svg'">
               </ul>
             </span>
-            <span v-else-if="puesto.Puesto == -1 && datosJuego.Cartas">
+            <span v-else-if="puesto.Puesto == -1 && datosJuego.Cartas" class="jugador2">
               <ul v-if="datosJuego.Cartas.length > 1" v-for="carta in datosJuego.Cartas[2]">
                 <img class="carta"
                   v-bind:src="'assets/svg/' + carta.Tipo + '/' + carta.Valor + carta.Tipo + '.svg'">
@@ -94,20 +94,20 @@
         <div class="div8"></div>
         <div class="div9">
           <container class="jugador1">
-            <span v-if="puesto.Puesto == 1 && datosJuego.Cartas">
+            <span v-if="puesto.Puesto == 1 && datosJuego.Cartas" class="jugador1">
               <ul v-if="datosJuego.Cartas.length > 2" v-for="cartaJugador1 in datosJuego.Cartas[puesto.Puesto + 1]">
                 <img class="carta"
                   v-bind:src="'assets/svg/' + cartaJugador1.Tipo + '/' + cartaJugador1.Valor + cartaJugador1.Tipo + '.svg'">
               </ul>
               <img v-if="datosJuego.Cartas.length == 2" class="cartaEspera" src="assets/svg/Nan.svg">
             </span>
-            <span v-else-if="puesto.Puesto >= 2 ">
+            <span v-else-if="puesto.Puesto >= 2 " class="jugador1">
               <ul v-for="cartaJugador1 in datosJuego.Cartas[puesto.Puesto - 1]">
                 <img class="carta"
                   v-bind:src="'assets/svg/' + cartaJugador1.Tipo + '/' + cartaJugador1.Valor + cartaJugador1.Tipo + '.svg'">
               </ul>
             </span>
-            <span v-else-if="puesto.Puesto == -1 && datosJuego.Cartas">
+            <span v-else-if="puesto.Puesto == -1 && datosJuego.Cartas" class="jugador1">
               <ul v-if="datosJuego.Cartas.length > 2" v-for="carta in datosJuego.Cartas[3]">
                 <img class="carta"
                   v-bind:src="'assets/svg/' + carta.Tipo + '/' + carta.Valor + carta.Tipo + '.svg'">
@@ -117,13 +117,13 @@
         </div>
         <div class="div10"></div>
         <div class="div11">
-          <span v-if="puesto.Puesto != 0">
+          <span v-if="puesto.Puesto != 0" class="div11">
             <ul v-for='carta in verCartas'>
               <img v-if="carta.Tipo != ''" class="carta"
                 v-bind:src="'assets/svg/' + carta.Tipo + '/' + carta.Valor + carta.Tipo + '.svg'">
             </ul>
           </span>
-          <span v-else-if="puesto.Puesto == -1 && datosJuego.Cartas">
+          <span v-else-if="puesto.Puesto == -1 && datosJuego.Cartas" class="div11">
               <ul v-if="datosJuego.Cartas.length > 1" v-for="carta in datosJuego.Cartas[1]">
                 <img class="carta"
                   v-bind:src="'assets/svg/' + carta.Tipo + '/' + carta.Valor + carta.Tipo + '.svg'">
@@ -148,8 +148,6 @@
           <p id="tiempo">Segundos: {{datosJuego.Segundos}}</p>
           <p>Turno: {{datosJuego.Turno}}</p>
           <p>Puesto: {{puesto.Puesto}}</p>
-          <!-- <p>Dinero: {{dinero}}</p> -->
-          <!-- <p>Apuesta: {{apuesta}}</p> -->
         </div>
         <div class="botones">
           <button class="pedir-btn" @click="hit">Pedir</button>
