@@ -31,18 +31,18 @@ var app = new Vue({
         async comenzarAJugar() {
             this.inicio = false;
             this.jugar = true;
-            console.log("COMIENZAR NUEVO JUEGO!")
+            // console.log("COMIENZAR NUEVO JUEGO!")
             // let response = await axios.get('/join')
             let response = await fetch('http://172.105.20.118:8080/join')
             this.datosJuego = await response.json()
-            console.log("ESTADO: " + this.datosJuego.Estado)
-            console.log(this.datosJuego)
+            // console.log("ESTADO: " + this.datosJuego.Estado)
+            // console.log(this.datosJuego)
             this.updatePuesto()
         },
         async updatePuesto() {
             let response = await fetch('http://172.105.20.118:8080/puesto')
             this.puesto = await response.json()
-            console.log("PUESTO UPDATED: " + this.puesto.Puesto)
+            // console.log("PUESTO UPDATED: " + this.puesto.Puesto)
         },
         async continuarJugando() {
             this.inicio = false;
@@ -61,7 +61,7 @@ var app = new Vue({
         },
         async hit() {
             if (this.datosJuego.Turno == this.puesto.Puesto && this.datosJuego.Estado == "Jugando") {
-                console.log("HIT---->Hecho")
+                // console.log("HIT---->Hecho")
                 let response = await fetch('http://172.105.20.118:8080/hit')
                 this.datosJuego = await response.json()
                 this.totCartas++
@@ -70,7 +70,7 @@ var app = new Vue({
             }
         },
         async stay() {
-            let response = await fetch('http://172.105.20.118:8080/stay')
+            await fetch('http://172.105.20.118:8080/stay')
         },
         async stayPasado() {
             this.dinero = this.dinero - this.apuesta
@@ -87,16 +87,16 @@ var app = new Vue({
             let response = await fetch('http://172.105.20.118:8080')
             djR = await response.json()
             turnoViejo = this.datosJuego.Turno
-            console.log(djR)
+            // console.log(djR)
             // console.log(this.datosJuego.Turno)
             if (djR.Estado == this.datosJuego.Estado) {
                 this.datosJuego = djR
                 if (this.datosJuego.Estado != 'Disponible') {
-                    console.log(this.datosJuego.Segundos + " segundos")
+                    // console.log(this.datosJuego.Segundos + " segundos")
                     if (this.datosJuego.Estado == 'Jugando' && this.datosJuego.Turno != turnoViejo && this.datosJuego.Turno == this.puesto.Puesto) {
-                        console.log("¡Juega y has tus apuestas!")
+                        // console.log("¡Juega y has tus apuestas!")
                         this.calcSuma()
-                        console.log("El turno termina en:\n" + this.datosJuego.Segundos + " segundos")
+                        // console.log("El turno termina en:\n" + this.datosJuego.Segundos + " segundos")
                     }
                 }
             } else {
@@ -117,22 +117,23 @@ var app = new Vue({
                             this.salirseDelJuego()
                         break;
                     case 'Recibiendo':
-                        console.log("Esperando a otros jugadores. Faltan: ")
+                        // console.log("Esperando a otros jugadores. Faltan: ")
                         this.updatePuesto()
                         break;
                     case 'Jugando':
                         if (this.datosJuego.Turno == this.puesto.Puesto) {
-                            console.log("¡Juega y has tus apuestas!")
+                            // console.log("¡Juega y has tus apuestas!")
                             this.calcSuma()
                         }
-                        console.log("El turno termina en:\n" + this.datosJuego.Segundos + " segundos")
+                        // console.log("El turno termina en:\n" + this.datosJuego.Segundos + " segundos")
                         break;
                     case 'Done':
                         if (this.puesto.Puesto != 0) {
-                            console.log("Jugador: " + this.suma)
+                            // console.log("Jugador: " + this.suma)
+
                             this.calcularJuego()
                             this.continuar = true
-                            console.log("La siguiente mesa disponible en: " + this.datosJuego.Segundos + " segundos")
+                            // console.log("La siguiente mesa disponible en: " + this.datosJuego.Segundos + " segundos")
                         }
                         break;
                 }
@@ -144,7 +145,7 @@ var app = new Vue({
         },
         apostar: function (valor) {
             if (this.puesto.Puesto > 0 && this.datosJuego.Turno == this.puesto.Puesto && this.datosJuego.Estado == "Jugando") {
-                console.log("turno: " + this.datosJuego.Turno)
+                // console.log("turno: " + this.datosJuego.Turno)
                 if (valor + this.apuesta <= this.dinero)
                     this.apuesta = this.apuesta + valor
             }
@@ -166,14 +167,14 @@ var app = new Vue({
                             while (this.datosJuego.Cartas[this.puesto.Puesto][cont] != null) {
                                 if (this.datosJuego.Cartas[this.puesto.Puesto][cont].Valor == 'A') {
                                     this.suma = this.suma - 10
-                                    console.log("con as " + this.suma)
+                                    // console.log("con as " + this.suma)
                                 }
                                 cont++
                                 if (this.suma <= 21)
                                     break
                             }
                         }
-                        console.log("SUMA: " + this.suma)
+                        // console.log("SUMA: " + this.suma)
                         this.cartasSumadas++
                     }
                 }
@@ -203,29 +204,50 @@ var app = new Vue({
                     while (this.datosJuego.Cartas[0][cont] != null) {
                         if (this.datosJuego.Cartas[0][cont].Valor == 'A') {
                             sumHost = sumHost - 10
-                            console.log("Host con as: " + sumHost)
+                            // console.log("Host con as: " + sumHost)
                         }
                         cont++
                         if (sumHost <= 21)
                             break
                     }
                 }
-                console.log("Host: " + sumHost)
+                // console.log("Host: " + sumHost)
                 if (sumHost > 21) {
-                    console.log("¡Ganaste el juego!")
+                    // console.log("¡Ganaste el juego!")
+                    setTimeout(function () {
+                        alert("¡Ganaste el juego!");
+                    }, 1000);
+
                     this.dinero = this.dinero + this.apuesta * 2
                 } else if (this.suma == sumHost) {
-                    console.log("¡Empate!")
+                    // console.log("¡Empate!")
+                    setTimeout(function () {
+                        alert("¡Empate!");
+                    }, 1000);
+
                     this.dinero = this.dinero + this.apuesta
                 } else if (this.suma > sumHost) {
-                    console.log("¡Ganaste el juego!")
+                    // console.log("¡Ganaste el juego!")
+                    setTimeout(function () {
+                        alert("¡Ganaste el juego!");
+                    }, 1000);
+
+
                     this.dinero = this.dinero + this.apuesta * 2
                 } else if (this.suma < sumHost) {
-                    console.log("¡Bohoo! Perdiste")
+                    // console.log("¡Bohoo! Perdiste")
+                    setTimeout(function () {
+                        alert("¡Bohoo! Perdiste");
+                    }, 1000);
+
                     this.dinero = this.dinero - this.apuesta
                 }
             } else {
-                console.log("¡Bohoo! Perdiste")
+                // console.log("¡Bohoo! Perdiste")
+                setTimeout(function () {
+                    alert("¡Bohoo! Perdiste");
+                }, 1000);
+
             }
         },
     },

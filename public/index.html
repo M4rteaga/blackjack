@@ -33,7 +33,7 @@
         <img src="assets/svg/cardIntro.svg" style="width: 100%; height: auto" />
       </div>
       <button v-on:click="comenzarAJugar" :disabled="!botonInicio">Comenzar a jugar</button>
-      <button v-on:click="continuarJugando" style="margin-top: 1rem;">Continuar jugando</button>
+      <button v-on:click="continuarJugando" style="margin-top: 1rem;">Mirar partida en curso</button>
     </div>
 
     <div class="juego" v-show="jugar">
@@ -135,8 +135,8 @@
       <div class="estado">
         <div class="datosApuesta">
           <div>
-            <p>Dinero: {{dinero}}</p>
-            <p>Apuesta: {{apuesta}}</p>
+            <h3>Dinero: {{dinero}}</h3>
+            <h3>Apuesta: {{apuesta}}</h3>
           </div>
           <div class="divModenas"><!--  v-if="puesto.Puesto == 0 || puesto.Puesto != datosJuego.Turno": mondedas-btn: disabled> algo así-->
             <button class="monedas-btn" id="k1" @click="apostar(1000)"><img src="assets/svg/moneda1000.svg" class="moneda" /></button>
